@@ -1,0 +1,36 @@
+<div class="card bg-dark text-white">
+    <div class="card-header">{{header}}</div>
+    <div class="card-body">
+        <form>
+            <div class="form-group row">
+                <label for="firstName" class="col-form-label col-sm-2">First Name</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" [(ngModel)]="client.firstName" name="firstName">
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="lastName" class="col-form-label col-sm-2">Last Name</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" [(ngModel)]="client.lastName" name="lastName">
+                    
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="email" class="col-form-label col-sm-2">Email</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" [(ngModel)]="client.email" name="email">
+                    
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <button class="btn btn-primary" role="button" (click)="create()" *ngIf="!client.id else elseBlock">Create</button>
+                    <ng-template #elseBlock>
+                        <button class="btn btn-primary" role="button" (click)="update()">Update</button>
+                    </ng-template>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

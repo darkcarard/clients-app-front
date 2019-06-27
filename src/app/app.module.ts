@@ -7,10 +7,14 @@ import { FooterComponent } from './shared/footer/footer.component';
 import { ClientListComponent } from './feature/clients/client-list/client-list.component';
 import { Routes, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { ClientFormComponent } from './feature/clients/client-form/client-form.component';
+import { FormsModule } from '@angular/forms';
 
 const ROUTES: Routes = [
-  {path: '', redirectTo: '/clients', pathMatch: 'full'},
-  {path: 'clients', component: ClientListComponent}
+  { path: '', redirectTo: '/clients', pathMatch: 'full' },
+  { path: 'clients', component: ClientListComponent },
+  { path: 'clients/form', component: ClientFormComponent },
+  { path: 'clients/form/:id', component: ClientFormComponent }
 ];
 
 @NgModule({
@@ -18,12 +22,14 @@ const ROUTES: Routes = [
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    ClientListComponent
+    ClientListComponent,
+    ClientFormComponent
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(ROUTES),
-    HttpClientModule
+    HttpClientModule,
+    FormsModule,
+    RouterModule.forRoot(ROUTES)
   ],
   providers: [],
   bootstrap: [AppComponent]

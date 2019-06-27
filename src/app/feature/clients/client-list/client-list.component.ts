@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Client } from 'src/app/shared/model/client';
 import { ClientService } from '../client.service';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-client-list',
@@ -11,6 +12,7 @@ export class ClientListComponent implements OnInit {
 
   header: string = 'Clients';
   title: string = 'Clients List';
+  notClientsMessage = 'There are not registered clients!';
 
   clients: Client[];
 
@@ -22,4 +24,36 @@ export class ClientListComponent implements OnInit {
     );
   }
 
+  deleteClient(client: Client): void {
+    const swalWithBootstrapButtons = swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false,
+    })
+    
+    swalWithBootstrapButtons.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.value) {
+        this.clientService.deleteClient(client.id).subscribe(
+          response => { 
+            this.clients = this.clients.filter(cli => cli !== client);
+            swalWithBootstrapButtons.fire(
+              'Deleted!',
+              `${client.firstName} has been deleted.`,
+              'success'
+            );
+          }
+        );        
+      } 
+    })
+  }
 }
