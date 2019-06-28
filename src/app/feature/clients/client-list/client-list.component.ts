@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Client } from 'src/app/shared/model/client';
 import { ClientService } from '../client.service';
 import swal from 'sweetalert2';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-client-list',
@@ -15,13 +16,22 @@ export class ClientListComponent implements OnInit {
   notClientsMessage = 'There are not registered clients!';
 
   clients: Client[];
+  paginator: any;
 
-  constructor(private clientService: ClientService) { }
+  constructor(private clientService: ClientService, 
+    private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
-    this.clientService.getClients().subscribe(
-      clients => this.clients = clients
-    );
+    
+    this.activatedRoute.paramMap.subscribe(params => {
+      let page: number = params.get('page') ? +params.get('page') : 0;      
+      this.clientService.getClients(page).subscribe(
+        response => {
+          this.clients = response.content as Client[];
+          this.paginator = response;
+        }
+      )
+    });
   }
 
   deleteClient(client: Client): void {
