@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Client } from 'src/app/shared/model/client.js';
 import { Observable, throwError } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest, HttpEvent } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import swal, { SweetAlertType } from 'sweetalert2';
 import { Router } from '@angular/router';
@@ -21,8 +21,10 @@ export class ClientService {
   private updateClientUri: string = 'clients/';
   private deleteClientUri: string = 'clients/';
   private clientsRedirectUri: string = '/clients';
+  private clientsUploadUri: string = 'clients/upload/';
   private getClientErrorTitle: string = 'Error getting the client';
   private duplicatedEmailErrorTitle: string = 'Duplicated email';
+  private fileUploadErrorTitle: string = 'Error uploading the file';
   private sweetAlertErrorType: SweetAlertType = 'error';
 
 
@@ -57,5 +59,15 @@ export class ClientService {
 
   deleteClient(id: number): Observable<Client> {
     return this.httpClient.delete<Client>(this.host + this.deleteClientUri + id);
+  }
+
+  uploadImage(file: File, id: number): Observable<HttpEvent<{}>> {
+    let formData = new FormData();
+    formData.append('file', file);
+    formData.append('id', id.toString());
+
+    const request = new HttpRequest('POST', this.host + this.clientsUploadUri, formData, {reportProgress: true});
+
+    return this.httpClient.request(request);
   }
 }

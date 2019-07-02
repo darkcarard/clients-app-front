@@ -1,3 +1,4 @@
+<app-client-detail *ngIf="selectedClient" [client] = "selectedClient"></app-client-detail>
 <div class="card bg-light mb-3">
     <div class="card-header">{{header}}</div>
     <div class="card-body">
@@ -19,11 +20,11 @@
             </thead>
             <tbody>
                 <tr *ngFor="let client of clients">
-                    <td>{{client.id}}</td>
+                    <td><button class="btn btn-success btn-sm" role="button" name="editBtn" (click)="openModal(client)">{{client.id}}</button></td>
                     <td>{{client.firstName}}</td>
                     <td>{{client.lastName}}</td>
                     <td>{{client.email}}</td>
-                    <td>{{client.createdAt}}</td>
+                    <td>{{client.createdAt | date: fullDate}}</td>
                     <td>
                             <div class="text-center">                       
                         <div class="btn-group" role="group">                               

@@ -38,6 +38,19 @@
                     </div>                    
                 </div>
             </div>
+            <div class="form-group row">
+                <label for="createdAt" class="col-form-label col-sm-2">Date</label>
+                <div class="col-sm-6">
+                    <input [matDatepicker]="myDatepicker" class="form-control" [(ngModel)]="client.createdAt" name="createdAt" required #createdAt="ngModel" style="display: inline; width: 300px">
+                    <mat-datepicker-toggle [for]="myDatepicker"></mat-datepicker-toggle>
+                    <mat-datepicker #myDatepicker></mat-datepicker>                     
+                    <div class="alert alert-danger" *ngIf="createdAt.invalid && (createdAt.dirty)">
+                        <div *ngIf="lastName.errors.required">
+                            Date is required!
+                        </div>
+                    </div>              
+                </div>
+            </div>
             <div class="form-group">
                 <div class="col-sm-6">
                     <button class="btn btn-primary" role="button" (click)="create()" *ngIf="!client.id else elseBlock" [disabled]="!clientForm.form.valid">Create</button>

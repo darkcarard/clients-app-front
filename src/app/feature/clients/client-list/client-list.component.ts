@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Client } from 'src/app/shared/model/client';
 import { ClientService } from '../client.service';
 import swal from 'sweetalert2';
 import { ActivatedRoute } from '@angular/router';
+import { ModalService } from 'src/app/shared/modal/modal.service';
 
 @Component({
   selector: 'app-client-list',
@@ -17,12 +18,13 @@ export class ClientListComponent implements OnInit {
 
   clients: Client[];
   paginator: any;
+  selectedClient: Client;
 
   constructor(private clientService: ClientService, 
-    private activatedRoute: ActivatedRoute) { }
+    private activatedRoute: ActivatedRoute,
+    private modalService: ModalService) { }
 
-  ngOnInit() {
-    
+  ngOnInit() {    
     this.activatedRoute.paramMap.subscribe(params => {
       let page: number = params.get('page') ? +params.get('page') : 0;      
       this.clientService.getClients(page).subscribe(
@@ -65,5 +67,10 @@ export class ClientListComponent implements OnInit {
         );        
       } 
     })
+  }
+
+  openModal(client: Client) {
+    this.selectedClient = client;
+    this.modalService.openModal();
   }
 }

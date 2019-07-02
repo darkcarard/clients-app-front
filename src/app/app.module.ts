@@ -10,6 +10,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { ClientFormComponent } from './feature/clients/client-form/client-form.component';
 import { FormsModule } from '@angular/forms';
 import { PaginatorComponent } from './shared/paginator/paginator.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material';
+import { ClientDetailComponent } from './feature/clients/client-detail/client-detail.component';
 
 const ROUTES: Routes = [
   { path: '', redirectTo: '/clients', pathMatch: 'full' },
@@ -26,13 +30,17 @@ const ROUTES: Routes = [
     FooterComponent,
     ClientListComponent,
     ClientFormComponent,
-    PaginatorComponent
+    PaginatorComponent,
+    ClientDetailComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
-    RouterModule.forRoot(ROUTES)
+    RouterModule.forRoot(ROUTES),
+    BrowserAnimationsModule,
+    MatDatepickerModule, 
+    MatNativeDateModule
   ],
   providers: [],
   bootstrap: [AppComponent]
