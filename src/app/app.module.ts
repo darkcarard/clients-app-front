@@ -14,6 +14,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material';
 import { ClientDetailComponent } from './feature/clients/client-detail/client-detail.component';
+import { DatePipe } from '@angular/common';
 
 const ROUTES: Routes = [
   { path: '', redirectTo: '/clients', pathMatch: 'full' },
@@ -42,7 +43,7 @@ const ROUTES: Routes = [
     MatDatepickerModule, 
     MatNativeDateModule
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

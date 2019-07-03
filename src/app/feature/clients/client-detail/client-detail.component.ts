@@ -1,9 +1,21 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { ClientService } from '../client.service';
-import { Client } from 'src/app/shared/model/client';
+import {
+  Component,
+  OnInit,
+  Input
+} from '@angular/core';
+import {
+  ClientService
+} from '../client.service';
+import {
+  Client
+} from 'src/app/shared/model/client';
 import swal from 'sweetalert2';
-import { HttpEventType } from '@angular/common/http';
-import { ModalService } from 'src/app/shared/modal/modal.service';
+import {
+  HttpEventType
+} from '@angular/common/http';
+import {
+  ModalService
+} from 'src/app/shared/modal/modal.service';
 
 @Component({
   selector: 'app-client-detail',
@@ -21,15 +33,15 @@ export class ClientDetailComponent implements OnInit {
   private notFileSelectedError: string = 'You must select a file for upload!';
   private wrongFormatErrorTitle: string = 'File format error';
   private wrongFormatError: string = 'You must upload an image file!';
- 
-  constructor(private clientService: ClientService,     
-    private modalService: ModalService) { }
+
+  constructor(private clientService: ClientService,
+    private modalService: ModalService) {}
 
   ngOnInit() {}
 
   chooseFile(event: any) {
     this.selectedFile = event.target.files[0];
-    if(this.selectedFile.type.indexOf('image') < 0) {
+    if (this.selectedFile.type.indexOf('image') < 0) {
       swal.fire(this.wrongFormatErrorTitle, this.wrongFormatError, 'error');
       this.selectedFile = null;
     }
@@ -40,12 +52,13 @@ export class ClientDetailComponent implements OnInit {
       this.clientService.uploadImage(this.selectedFile, this.client.id).subscribe(
         event => {
           if (event.type === HttpEventType.UploadProgress) {
-            this.progress = Math.round((event.loaded/event.total)*100);
+            this.progress = Math.round((event.loaded / event.total) * 100);
           } else if (event.type === HttpEventType.Response) {
             let response: any = event.body;
             this.client = response as Client;
+            this.modalService.uploadNotify.emit(this.client);
             swal.fire('File upload', 'File uploaded succesfully!', 'success');
-          }          
+          }
         }
       );
     } else {

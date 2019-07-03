@@ -1,3 +1,5 @@
+import { Zone } from './zone';
+
 export class Client {
     id: number;
     firstName: string;
@@ -5,4 +7,5 @@ export class Client {
     email: string;
     createdAt: string;
     picture: string;
+    zone: Zone;
 }

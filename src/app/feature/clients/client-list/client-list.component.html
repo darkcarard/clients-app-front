@@ -1,41 +1,53 @@
-<app-client-detail *ngIf="selectedClient" [client] = "selectedClient"></app-client-detail>
+<app-client-detail *ngIf="selectedClient" [client]="selectedClient"></app-client-detail>
 <div class="card bg-light mb-3">
-    <div class="card-header">{{header}}</div>
-    <div class="card-body">
-        <h5 class="card-title">{{title}}</h5>
-        <div class="my-2 text-left">
-            <button class="btn btn-rounded btn-secondary" role="button" [routerLink]="['/clients/form']">Client Create</button>
-        </div>
-        <div class="alert alert-info" *ngIf="clients?.length==0">{{notClientsMessage}}</div>
-        <table class="table table-bordered table-striped" *ngIf="clients?.length>0">
-            <thead class="text-center">
-                <tr>
-                    <th>id</th>
-                    <th>nombre</th>
-                    <th>apellido</th>
-                    <th>correo</th>
-                    <th>fecha</th>
-                    <th>actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let client of clients">
-                    <td><button class="btn btn-success btn-sm" role="button" name="editBtn" (click)="openModal(client)">{{client.id}}</button></td>
-                    <td>{{client.firstName}}</td>
-                    <td>{{client.lastName}}</td>
-                    <td>{{client.email}}</td>
-                    <td>{{client.createdAt | date: fullDate}}</td>
-                    <td>
-                            <div class="text-center">                       
-                        <div class="btn-group" role="group">                               
-                            <button class="btn btn-secondary btn-sm" role="button" name="editBtn" [routerLink]="['/clients/form', client.id]">edit</button>                    
-                            <button class="btn btn-danger btn-sm" role="button" name="deleteBtn" (click)="deleteClient(client)">delete</button>
-                        </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <app-paginator *ngIf="paginator" [paginator]="paginator"></app-paginator>
+  <div class="card-header">{{header}}</div>
+  <div class="card-body">
+    <h5 class="card-title">{{title}}</h5>
+    <div class="my-2 text-left">
+      <button class="btn btn-rounded btn-secondary" role="button" [routerLink]="['/clients/form']">Client
+        Create</button>
     </div>
+    <div class="alert alert-info" *ngIf="clients?.length==0">{{notClientsMessage}}</div>
+    <table class="table table-bordered table-striped" *ngIf="clients?.length>0">
+      <thead class="text-center">
+        <tr>
+          <th>profile</th>
+          <th>nombre</th>
+          <th>apellido</th>
+          <th>correo</th>
+          <th>fecha</th>
+          <th>zone</th>
+          <th>actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let client of clients">
+          <td>
+            <img class="img-thumbnail rouded" *ngIf="client?.picture" (click)="openModal(client)"
+              style="width: 64px; cursor: pointer;"
+              src="http://localhost:8080/api/clients/upload/img/{{client.picture}}" alt="{{client.picture}}">
+            <img class="img-thumbnail rouded" *ngIf="!client?.picture" (click)="openModal(client)"
+              style="width: 64px; cursor: pointer;" src="http://localhost:8080/images/tux_default_user.png"
+              alt="tux_default_user">
+          </td>
+          <td>{{client.firstName}}</td>
+          <td>{{client.lastName}}</td>
+          <td>{{client.email}}</td>
+          <td>{{client.createdAt | date: fullDate}}</td>
+          <td>{{client.zone.name}}</td>
+          <td>
+            <div class="text-center">
+              <div class="btn-group" role="group">
+                <button class="btn btn-secondary btn-sm" role="button" name="editBtn"
+                  [routerLink]="['/clients/form', client.id]">edit</button>
+                <button class="btn btn-danger btn-sm" role="button" name="deleteBtn"
+                  (click)="deleteClient(client)">delete</button>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <app-paginator *ngIf="paginator" [paginator]="paginator"></app-paginator>
+  </div>
 </div>

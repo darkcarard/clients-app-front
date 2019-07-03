@@ -1,64 +1,74 @@
 <div class="card bg-dark text-white">
-    <div class="card-header">{{header}}</div>
-    <div class="card-body">
-        <form #clientForm="ngForm">
-            <div class="form-group row">
-                <label for="firstName" class="col-form-label col-sm-2">First Name</label>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control" [(ngModel)]="client.firstName" name="firstName" required #firstName="ngModel">
-                    <div class="alert alert-danger" *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)">
-                        <div *ngIf="firstName.errors.required">
-                            First name is required!
-                        </div>
-                    </div>
-                </div>
+  <div class="card-header">{{header}}</div>
+  <div class="card-body">
+    <form #clientForm="ngForm">
+      <div class="form-group row">
+        <label for="firstName" class="col-form-label col-sm-2">First Name</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" [(ngModel)]="client.firstName" name="firstName" required
+            #firstName="ngModel">
+          <div class="alert alert-danger" *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)">
+            <div *ngIf="firstName.errors.required">
+              First name is required!
             </div>
-            <div class="form-group row">
-                <label for="lastName" class="col-form-label col-sm-2">Last Name</label>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control" [(ngModel)]="client.lastName" name="lastName" required #lastName="ngModel">      
-                    <div class="alert alert-danger" *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)">
-                        <div *ngIf="lastName.errors.required">
-                            Last name is required!
-                        </div>
-                    </div>              
-                </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="lastName" class="col-form-label col-sm-2">Last Name</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" [(ngModel)]="client.lastName" name="lastName" required
+            #lastName="ngModel">
+          <div class="alert alert-danger" *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)">
+            <div *ngIf="lastName.errors.required">
+              Last name is required!
             </div>
-            <div class="form-group row">
-                <label for="email" class="col-form-label col-sm-2">Email</label>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control" [(ngModel)]="client.email" name="email" required email #email="ngModel">
-                    <div class="alert alert-danger" *ngIf="email.invalid && (email.dirty || email.touched)">
-                        <div *ngIf="email.errors.required">
-                            Email is required!
-                        </div>
-                        <div *ngIf="email.errors.email">
-                            Wrong email format!
-                        </div>
-                    </div>                    
-                </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="email" class="col-form-label col-sm-2">Email</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" [(ngModel)]="client.email" name="email" required email
+            #email="ngModel">
+          <div class="alert alert-danger" *ngIf="email.invalid && (email.dirty || email.touched)">
+            <div *ngIf="email.errors.required">
+              Email is required!
             </div>
-            <div class="form-group row">
-                <label for="createdAt" class="col-form-label col-sm-2">Date</label>
-                <div class="col-sm-6">
-                    <input [matDatepicker]="myDatepicker" class="form-control" [(ngModel)]="client.createdAt" name="createdAt" required #createdAt="ngModel" style="display: inline; width: 300px">
-                    <mat-datepicker-toggle [for]="myDatepicker"></mat-datepicker-toggle>
-                    <mat-datepicker #myDatepicker></mat-datepicker>                     
-                    <div class="alert alert-danger" *ngIf="createdAt.invalid && (createdAt.dirty)">
-                        <div *ngIf="lastName.errors.required">
-                            Date is required!
-                        </div>
-                    </div>              
-                </div>
+            <div *ngIf="email.errors.email">
+              Wrong email format!
             </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <button class="btn btn-primary" role="button" (click)="create()" *ngIf="!client.id else elseBlock" [disabled]="!clientForm.form.valid">Create</button>
-                    <ng-template #elseBlock>
-                        <button class="btn btn-primary" role="button" (click)="update()" [disabled]="!clientForm.form.valid">Update</button>
-                    </ng-template>
-                </div>
-            </div>
-        </form>
-    </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="createdAt" class="col-form-label col-sm-2">Date</label>
+        <div class="col-sm-6">
+          <input [(ngModel)]="createdAt" [matDatepicker]="createdAtDatePicker" class="form-control" name="createdAt"
+            style="display: inline; width: 300px;">
+          <mat-datepicker-toggle [for]="createdAtDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #createdAtDatePicker></mat-datepicker>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="zone" class="col-form-label col-sm-2">Zone</label>
+        <div class="col-sm-6">
+          <select  [compareWith]="zoneCompare" [(ngModel)]="client.zone" class="form-control" name="zone" style="width: 300px;">
+            <option [ngValue]="undefined">Select a zone</option>
+            <option *ngFor="let zone of zones"  [ngValue]="zone">{{zone.name}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-6">
+          <button class="btn btn-primary" role="button" (click)="create()" *ngIf="!client.id else elseBlock"
+            [disabled]="!clientForm.form.valid">Create</button>
+          <ng-template #elseBlock>
+            <button class="btn btn-primary" role="button" (click)="update()"
+              [disabled]="!clientForm.form.valid">Update</button>
+          </ng-template>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>

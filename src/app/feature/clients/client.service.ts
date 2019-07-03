@@ -25,6 +25,7 @@ export class ClientService {
   private getClientErrorTitle: string = 'Error getting the client';
   private duplicatedEmailErrorTitle: string = 'Duplicated email';
   private fileUploadErrorTitle: string = 'Error uploading the file';
+  private validationErrorTitle: string = 'Error validating the form';
   private sweetAlertErrorType: SweetAlertType = 'error';
 
 
@@ -37,7 +38,7 @@ export class ClientService {
   createClient(client: Client): Observable<Client> {
     return this.httpClient.post<Client>(this.host + this.createClientUri, client, {headers: this.httpHeaders}).pipe(
       catchError(e => {
-        swal.fire(this.duplicatedEmailErrorTitle, e.error.message, this.sweetAlertErrorType);
+        swal.fire(this.validationErrorTitle, e.error.message, this.sweetAlertErrorType);
         return throwError(e);
       })
     );
