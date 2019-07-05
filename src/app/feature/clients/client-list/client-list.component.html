@@ -4,25 +4,26 @@
   <div class="card-body">
     <h5 class="card-title">{{title}}</h5>
     <div class="my-2 text-left">
-      <button class="btn btn-rounded btn-secondary" role="button" [routerLink]="['/clients/form']">Client
-        Create</button>
+      <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-rounded btn-secondary" role="button" [routerLink]="['/clients/form']">
+        Create Client
+      </button>
     </div>
     <div class="alert alert-info" *ngIf="clients?.length==0">{{notClientsMessage}}</div>
     <table class="table table-bordered table-striped" *ngIf="clients?.length>0">
       <thead class="text-center">
         <tr>
-          <th>profile</th>
+          <th *ngIf="authService.hasRole('ROLE_USER')">profile</th>
           <th>nombre</th>
           <th>apellido</th>
           <th>correo</th>
           <th>fecha</th>
           <th>zone</th>
-          <th>actions</th>
+          <th *ngIf="authService.hasRole('ROLE_ADMIN')">actions</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let client of clients">
-          <td>
+          <td *ngIf="authService.hasRole('ROLE_USER')">
             <img class="img-thumbnail rouded" *ngIf="client?.picture" (click)="openModal(client)"
               style="width: 64px; cursor: pointer;"
               src="http://localhost:8080/api/clients/upload/img/{{client.picture}}" alt="{{client.picture}}">
@@ -35,7 +36,7 @@
           <td>{{client.email}}</td>
           <td>{{client.createdAt | date: fullDate}}</td>
           <td>{{client.zone.name}}</td>
-          <td>
+          <td *ngIf="authService.hasRole('ROLE_ADMIN')">
             <div class="text-center">
               <div class="btn-group" role="group">
                 <button class="btn btn-secondary btn-sm" role="button" name="editBtn"

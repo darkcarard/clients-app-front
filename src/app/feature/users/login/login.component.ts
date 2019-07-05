@@ -22,14 +22,13 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.authService.isAuthenticated) {
+    if (this.authService.isAuthenticated()) {
       swal.fire('Already Authenticated','You\'re already authenticated','info');
       this.router.navigate(['/clients']);
     }
   }
 
   login(): void {
-    console.log(this.user);
     if (this.user.username == null || this.user.password == null) {
       swal.fire('Login Error', 'Empty Username or Password', 'error');
     }
