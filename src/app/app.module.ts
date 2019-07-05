@@ -15,13 +15,15 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material';
 import { ClientDetailComponent } from './feature/clients/client-detail/client-detail.component';
 import { DatePipe } from '@angular/common';
+import { LoginComponent } from './feature/users/login/login.component';
 
 const ROUTES: Routes = [
   { path: '', redirectTo: '/clients', pathMatch: 'full' },
   { path: 'clients', component: ClientListComponent },
   { path: 'clients/page/:page', component: ClientListComponent },
   { path: 'clients/form', component: ClientFormComponent },
-  { path: 'clients/form/:id', component: ClientFormComponent }
+  { path: 'clients/form/:id', component: ClientFormComponent },
+  { path: 'login', component: LoginComponent },
 ];
 
 @NgModule({
@@ -32,7 +34,8 @@ const ROUTES: Routes = [
     ClientListComponent,
     ClientFormComponent,
     PaginatorComponent,
-    ClientDetailComponent
+    ClientDetailComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

@@ -7,12 +7,12 @@ import swal, { SweetAlertType } from 'sweetalert2';
 import { Router } from '@angular/router';
 import { formatDate } from '@angular/common';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({providedIn: 'root'})
 export class ClientService {
 
-  private httpHeaders: HttpHeaders = new HttpHeaders({'Content-Type' : 'application/json'})
+  private httpHeaders: HttpHeaders = new HttpHeaders({
+    'Content-Type': 'application/json'
+  })
   private host: string = 'http://localhost:8080/api/';
   private findAllClientsUri: string = 'clients/';
   private findAllClientsPaginatedUri: string = 'clients/page/';
@@ -29,24 +29,39 @@ export class ClientService {
   private sweetAlertErrorType: SweetAlertType = 'error';
 
 
-  constructor(private httpClient: HttpClient, private router: Router) { }
+  constructor(private httpClient: HttpClient, private router: Router) {}
 
-  getClients(page: number): Observable<any> {
-    return this.httpClient.get<Client[]>(this.host + this.findAllClientsPaginatedUri + page);
+  private isUnauthorized(e): Boolean {
+    if (e.status == 401 || e.status == 403) {      
+      this.router.navigate(['/login']);
+      return true;
+    }     
+    return false;
+  }
+
+  getClients(page: number): Observable <any> {
+    return this.httpClient.get <Client[]> (this.host + this.findAllClientsPaginatedUri + page);
   }
 
   createClient(client: Client): Observable<Client> {
-    return this.httpClient.post<Client>(this.host + this.createClientUri, client, {headers: this.httpHeaders}).pipe(
-      catchError(e => {
-        swal.fire(this.validationErrorTitle, e.error.message, this.sweetAlertErrorType);
-        return throwError(e);
-      })
-    );
+    return this.httpClient.post <Client> (this.host + this.createClientUri, 
+      client, {headers: this.httpHeaders}).pipe(
+        catchError(e => {          
+          if(this.isUnauthorized(e)) {           
+            return throwError(e);
+          }
+          swal.fire(this.validationErrorTitle, e.error.message, this.sweetAlertErrorType);
+          return throwError(e);
+        })
+      );
   }
 
   getClient(id: number): Observable<Client> {
-    return this.httpClient.get<Client>(this.host + this.findClientUri + id).pipe(
-      catchError(e => {
+    return this.httpClient.get <Client> (this.host + this.findClientUri + id).pipe(
+      catchError(e => {       
+        if(this.isUnauthorized(e)) {
+          return throwError(e);
+        }
         this.router.navigate([this.clientsRedirectUri]);
         swal.fire(this.getClientErrorTitle, e.error.message, this.sweetAlertErrorType);
         return throwError(e);
@@ -55,20 +70,40 @@ export class ClientService {
   }
 
   updateClient(client: Client): Observable<Client> {
-    return this.httpClient.put<Client>(this.host + this.updateClientUri + client.id, client, {headers: this.httpHeaders});
+    return this.httpClient.put<Client>(this.host + this.updateClientUri + client.id, client, {
+      headers: this.httpHeaders
+    }).pipe(      
+      catchError(e => {    
+        if(this.isUnauthorized(e)) {
+          return throwError(e);
+        }
+      })
+    );
   }
 
-  deleteClient(id: number): Observable<Client> {
-    return this.httpClient.delete<Client>(this.host + this.deleteClientUri + id);
+  deleteClient(id: number): Observable <Client> {
+    return this.httpClient.delete<Client>(this.host + this.deleteClientUri + id).pipe(
+      catchError(e => {
+        this.isUnauthorized(e);
+        return throwError(e);
+      })
+    );
   }
 
-  uploadImage(file: File, id: number): Observable<HttpEvent<{}>> {
+  uploadImage(file: File, id: number): Observable <HttpEvent<{}>> {
     let formData = new FormData();
     formData.append('file', file);
     formData.append('id', id.toString());
 
-    const request = new HttpRequest('POST', this.host + this.clientsUploadUri, formData, {reportProgress: true});
+    const request = new HttpRequest('POST', this.host + this.clientsUploadUri, formData, {
+      reportProgress: true
+    });
 
-    return this.httpClient.request(request);
+    return this.httpClient.request(request).pipe(
+      catchError(e => {
+        this.isUnauthorized(e);
+        return throwError(e);
+      })
+    );
   }
 }
